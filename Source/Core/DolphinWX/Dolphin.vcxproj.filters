@@ -263,6 +263,7 @@
     <ClCompile Include="DolphinSlider.cpp">
       <Filter>GUI\Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="SmashladderPatches\Smashladder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
@@ -483,6 +484,7 @@
       <Filter>GUI\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="Config\AddUSBDeviceDiag.h" />
+    <ClInclude Include="SmashladderPatches\Smashladder.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />

@@ -25,6 +25,7 @@
 #include "Common/IniFile.h"
 #include "Core/NetPlayClient.h"
 #include "Core/NetPlayServer.h"
+#include "DolphinWX/SmashladderPatches/Smashladder.h"
 
 namespace
 {
@@ -321,7 +322,7 @@ void NetPlaySetupFrame::OnHost(wxCommandEvent&)
 
 void NetPlaySetupFrame::DoHost()
 {
-	if (m_game_lbox->GetSelection() == wxNOT_FOUND)
+	if (m_game_lbox->GetSelection() == wxNOT_FOUND && Smashladder::m_netplay == false)
 	{
 		WxUtils::ShowErrorDialog(_("You must choose a game!"));
 		return;
@@ -333,7 +334,10 @@ void NetPlaySetupFrame::DoHost()
 	IniFile::Section& netplay_section = *ini_file.GetOrCreateSection("NetPlay");
 
 	NetPlayHostConfig host_config;
-	host_config.game_name = WxStrToStr(m_game_lbox->GetStringSelection());
+	if(Smashladder::m_netplay)
+		host_config.game_name = WxStrToStr(m_game_lbox->GetStringSelection());
+	else
+		host_config.game_name = WxStrToStr("SUPER SMASH BROS. Melee (GALE01, Revision 2)");
 	host_config.use_traversal = m_direct_traversal->GetCurrentSelection() == TRAVERSAL_CHOICE;
 	host_config.player_name = WxStrToStr(m_nickname_text->GetValue());
 	host_config.game_list_ctrl = m_game_list;
@@ -395,6 +399,9 @@ void NetPlaySetupFrame::DoJoin()
 
 	join_config.traversal_port = NetPlayLaunchConfig::GetTraversalPortFromIniConfig(netplay_section);
 	join_config.traversal_host = NetPlayLaunchConfig::GetTraversalHostFromIniConfig(netplay_section);
+	if (Smashladder::m_netplay) {
+		join_config.connect_hash_code = std::string(Smashladder::m_netplay_code.mb_str());
+	}
 
 	if (NetPlayLauncher::Join(join_config))
 	{

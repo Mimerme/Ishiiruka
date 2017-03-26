@@ -1,0 +1,2 @@
+﻿  Main.cpp
+c:\users\andros yang\source\repos\ishiiruka\source\core\core\netplayserver.h(7): fatal error C1083: Cannot open include file: 'SFML/Network/Packet.hpp': No such file or directory

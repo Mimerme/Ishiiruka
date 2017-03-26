@@ -74,6 +74,7 @@ public:
 		long style = wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE);
 
 	virtual ~CFrame();
+	void OnNetPlay(wxCommandEvent& event);
 
 	void* GetRenderHandle()
 	{
@@ -309,8 +310,6 @@ private:
 	void OnMemcard(wxCommandEvent& event);  // Misc
 	void OnImportSave(wxCommandEvent& event);
 	void OnExportAllSaves(wxCommandEvent& event);
-
-	void OnNetPlay(wxCommandEvent& event);
 
 	void OnShowCheatsWindow(wxCommandEvent& event);
 	void OnLoadWiiMenu(wxCommandEvent& event);

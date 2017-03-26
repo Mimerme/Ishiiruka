@@ -52,6 +52,8 @@
 #include "UICommon/UICommon.h"
 
 #include "VideoCommon/VideoBackendBase.h"
+#include "DolphinWX/SmashladderPatches/Smashladder.h"
+#include "DolphinWX\NetPlay\NetPlaySetupFrame.h"
 
 #if defined HAVE_X11 && HAVE_X11
 #include <X11/Xlib.h>
@@ -97,11 +99,45 @@ bool DolphinApp::Initialize(int& c, wxChar** v)
 
 void DolphinApp::OnInitCmdLine(wxCmdLineParser& parser)
 {
-	parser.SetCmdLine("");
+	static const wxCmdLineEntryDesc desc[] = {
+		{ wxCMD_LINE_OPTION, "n", "netplay", "Starts/Joins a netplay server", wxCMD_LINE_VAL_STRING,
+		wxCMD_LINE_PARAM_OPTIONAL },{ wxCMD_LINE_SWITCH, "s", "spectator", "Enable or disable spectators for the lobby", wxCMD_LINE_VAL_NONE,
+		wxCMD_LINE_PARAM_OPTIONAL },{ wxCMD_LINE_OPTION, "players", "playercount", "Expected number of players before the game starts (Host Only)", wxCMD_LINE_VAL_NUMBER,
+		wxCMD_LINE_PARAM_OPTIONAL },
+	{ wxCMD_LINE_OPTION, "player1","player1", "Player 2 expected name (Host Only)", wxCMD_LINE_VAL_STRING,
+		wxCMD_LINE_PARAM_OPTIONAL },
+	{ wxCMD_LINE_OPTION, "player2", "player2", "Player 3 expected name (Host Only)", wxCMD_LINE_VAL_STRING,
+		wxCMD_LINE_PARAM_OPTIONAL },
+	{ wxCMD_LINE_OPTION, "player3", "player3", "Player 4 expected name (Host Only)", wxCMD_LINE_VAL_STRING,
+		wxCMD_LINE_PARAM_OPTIONAL },
+	{ wxCMD_LINE_OPTION, "name", "playername", "Set netplay username", wxCMD_LINE_VAL_STRING,
+		wxCMD_LINE_PARAM_OPTIONAL },
+	{ wxCMD_LINE_NONE, nullptr, nullptr, nullptr, wxCMD_LINE_VAL_NONE, 0 } };
+
+	parser.SetDesc(desc);
 }
 
 bool DolphinApp::OnCmdLineParsed(wxCmdLineParser& parser)
 {
+	Smashladder::m_netplay = parser.Found("netplay", &Smashladder::m_netplay_code);
+	 if (Smashladder::m_netplay_code.Contains("host")) {
+		 Smashladder::m_netplay_host = true;
+	 }
+	 Smashladder::spec = parser.Found("spectator");
+		wxString temp; 
+		parser.Found("playercount", &Smashladder::expectedPlayerCount);
+		if (parser.Found("player1", &temp)) {
+			Smashladder::expectedPlayerNames[0] = std::string(temp.mb_str());
+		}
+			if (parser.Found("player2", &temp)) {
+				
+				Smashladder::expectedPlayerNames[1] = std::string(temp.mb_str());
+			}
+				if (parser.Found("player3", &temp)) {
+					
+					Smashladder::expectedPlayerNames[1] = std::string(temp.mb_str()); \
+				}
+					parser.Found("playername", &Smashladder::playername);
 	return true;
 }
 
@@ -195,6 +231,7 @@ void DolphinApp::ParseCommandLine()
 	m_movie_file = static_cast<const char*>(options.get("movie"));
 
 	m_user_path = static_cast<const char*>(options.get("user"));
+
 }
 
 #ifdef __APPLE__
@@ -237,6 +274,7 @@ void DolphinApp::AfterInit()
 	if (m_confirm_stop)
 		SConfig::GetInstance().bConfirmStop = m_confirm_setting;
 
+	/*
 	if (m_play_movie && !m_movie_file.empty())
 	{
 		if (Movie::PlayInput(WxStrToStr(m_movie_file)))
@@ -263,6 +301,17 @@ void DolphinApp::AfterInit()
 		if (main_frame->g_pCodeWindow->AutomaticStart())
 		{
 			main_frame->BootGame("");
+		}
+	}
+	*/
+
+	if (Smashladder::m_netplay) {
+		wxGetApp().GetCFrame()->OnNetPlay(wxCommandEvent());
+		if (Smashladder::m_netplay_code == "host") {
+			wxGetApp().GetCFrame()->g_NetPlaySetupDiag->OnHost(wxCommandEvent());
+		}
+		else {
+			wxGetApp().GetCFrame()->g_NetPlaySetupDiag->OnJoin(wxCommandEvent());
 		}
 	}
 }

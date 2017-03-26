@@ -22,6 +22,8 @@ class NetPlaySetupFrame final : public wxFrame
 public:
 	NetPlaySetupFrame(wxWindow* const parent, const CGameListCtrl* const game_list);
 	~NetPlaySetupFrame();
+	void OnJoin(wxCommandEvent& event);
+	void OnHost(wxCommandEvent& event);
 
 private:
 	static constexpr int CONNECT_TAB = 0;
@@ -33,8 +35,6 @@ private:
 	void CreateGUI();
 	wxNotebook* CreateNotebookGUI(wxWindow* parent);
 
-	void OnJoin(wxCommandEvent& event);
-	void OnHost(wxCommandEvent& event);
 	void DoJoin();
 	void DoHost();
 	void OnQuit(wxCommandEvent& event);
