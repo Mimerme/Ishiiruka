@@ -1,5 +1,6 @@
 #include <wx/string.h>
 #include <string>
+#include "Core\NetPlayServer.h"
 
 class Smashladder {
 public:
@@ -15,4 +16,6 @@ public:
 	//Allows different revisions of Dolphin to connect
 	static std::string m_netplay_client_string;
 	static bool initalized;
+
+	static void playerJoinServer(std::string playername, NetPlayServer *server);
 };

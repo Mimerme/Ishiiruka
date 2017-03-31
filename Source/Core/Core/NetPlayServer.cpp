@@ -18,6 +18,8 @@
 #include "Core/HW/Sram.h"
 #include "Core/NetPlayClient.h"  //for NetPlayUI
 #include "InputCommon/GCPadStatus.h"
+#include <iostream>
+#include "DolphinWX\SmashladderPatches\Smashladder.h"
 #if !defined(_WIN32)
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -279,7 +281,7 @@ unsigned int NetPlayServer::OnConnect(ENetPeer* socket)
 	spac << (MessageId)NP_MSG_PLAYER_JOIN;
 	spac << player.pid << player.name << player.revision;
 	SendToClients(spac);
-
+	Smashladder::playerJoinServer(player.name, this);
 	// send new client success message with their id
 	spac.clear();
 	spac << (MessageId)0;
@@ -594,6 +596,7 @@ unsigned int NetPlayServer::OnData(sf::Packet& packet, Client& player)
 		SendToClients(spac);
 
 		m_is_running = false;
+		std::cout << "Netplay Game Stopping" << std::endl;
 	}
 	break;
 
@@ -896,7 +899,7 @@ std::vector<std::pair<std::string, std::string>> NetPlayServer::GetInterfaceList
 #if defined(_WIN32)
 
 #elif defined(ANDROID)
-	// Android has no getifaddrs for some stupid reason.  If this
+	// Android no getifaddrs for some stupid reason.  If this
 	// functionality ends up actually being used on Android, fix this.
 #else
 	ifaddrs* ifp = nullptr;

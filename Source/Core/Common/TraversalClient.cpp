@@ -4,6 +4,7 @@
 #include "Common/Logging/Log.h"
 #include "Common/MsgHandler.h"
 #include "Common/Timer.h"
+#include <iostream>
 
 static void GetRandomishBytes(u8* buf, size_t size)
 {
@@ -136,6 +137,7 @@ void TraversalClient::HandleServerPacket(TraversalPacket* packet)
 		}
 		break;
 	case TraversalPacketHelloFromServer:
+	{
 		if (m_State != Connecting)
 			break;
 		if (!packet->helloFromServer.ok)
@@ -144,9 +146,14 @@ void TraversalClient::HandleServerPacket(TraversalPacket* packet)
 			break;
 		}
 		m_HostId = packet->helloFromServer.yourHostId;
+		std::string netplay_code(std::begin(m_HostId), std::end(m_HostId));
+		std::string netplay_code_label = "Host Code ";
+		std::string netplay_output = netplay_code_label.append(netplay_code);
+		std::cout << netplay_output << std::endl;
 		m_State = Connected;
 		if (m_Client)
 			m_Client->OnTraversalStateChanged();
+	}
 		break;
 	case TraversalPacketPleaseSendPacket:
 	{

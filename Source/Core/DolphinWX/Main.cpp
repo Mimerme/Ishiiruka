@@ -245,6 +245,8 @@ void DolphinApp::MacOpenFile(const wxString& fileName)
 
 void DolphinApp::AfterInit()
 {
+	std::cout << "Dolphin Initalized" << std::endl;
+
 	if (!m_batch_mode)
 		main_frame->UpdateGameList();
 
@@ -308,9 +310,11 @@ void DolphinApp::AfterInit()
 	if (Smashladder::m_netplay) {
 		wxGetApp().GetCFrame()->OnNetPlay(wxCommandEvent());
 		if (Smashladder::m_netplay_code == "host") {
+			std::cout << "Hosting lobby" << std::endl;
 			wxGetApp().GetCFrame()->g_NetPlaySetupDiag->OnHost(wxCommandEvent());
 		}
 		else {
+			std::cout << " lobby" << std::endl;
 			wxGetApp().GetCFrame()->g_NetPlaySetupDiag->OnJoin(wxCommandEvent());
 		}
 	}

@@ -28,6 +28,7 @@
 #include "InputCommon/GCAdapter.h"
 #include "VideoCommon/OnScreenDisplay.h"
 #include "VideoCommon/VideoConfig.h"
+#include <iostream>
 
 static std::mutex crit_netplay_client;
 static NetPlayClient* netplay_client = nullptr;
@@ -249,7 +250,7 @@ unsigned int NetPlayClient::OnData(sf::Packet& packet)
 		packet >> player.pid;
 		packet >> player.name;
 		packet >> player.revision;
-
+		std::cout << player.name + " has joined : " << std::to_string(player.pid) << std::endl;
 		{
 			std::lock_guard<std::recursive_mutex> lkp(m_crit.players);
 			m_players[player.pid] = player;
@@ -263,7 +264,7 @@ unsigned int NetPlayClient::OnData(sf::Packet& packet)
 	{
 		PlayerId pid;
 		packet >> pid;
-
+		std::cout << std::to_string(pid) + " has left" << std::endl;
 		{
 			std::lock_guard<std::recursive_mutex> lkp(m_crit.players);
 			m_players.erase(m_players.find(pid));
@@ -400,6 +401,7 @@ unsigned int NetPlayClient::OnData(sf::Packet& packet)
 	case NP_MSG_START_GAME:
 	{
 		{
+			std::cout << "Netplay Game Starting" << std::endl;
 			std::lock_guard<std::recursive_mutex> lkg(m_crit.game);
 			packet >> m_current_game;
 			packet >> g_NetPlaySettings.m_CPUthread;
@@ -436,6 +438,7 @@ unsigned int NetPlayClient::OnData(sf::Packet& packet)
 	case NP_MSG_DISABLE_GAME:
 	{
 		StopGame();
+		std::cout << "Netplay Game Stopping" << std::endl;
 		m_dialog->OnMsgStopGame();
 	}
 	break;
