@@ -30,6 +30,7 @@ void Smashladder::playerJoinServer(std::string playername, NetPlayServer *server
 		settings.m_DSPHLE = instance.bDSPHLE;
 		settings.m_DSPEnableJIT = instance.m_DSPEnableJIT;
 		settings.m_WriteToMemcard = false;
+		settings.m_CopyWiiSave = false;
 		settings.m_OCEnable = instance.m_OCEnable;
 		settings.m_OCFactor = instance.m_OCFactor;
 		settings.m_EXIDevice[0] = instance.m_EXIDevice[0];

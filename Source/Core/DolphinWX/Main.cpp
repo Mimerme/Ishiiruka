@@ -314,7 +314,7 @@ void DolphinApp::AfterInit()
 			wxGetApp().GetCFrame()->g_NetPlaySetupDiag->OnHost(wxCommandEvent());
 		}
 		else {
-			std::cout << " lobby" << std::endl;
+			std::cout << "Joining lobby" << std::endl;
 			wxGetApp().GetCFrame()->g_NetPlaySetupDiag->OnJoin(wxCommandEvent());
 		}
 	}

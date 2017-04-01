@@ -33,6 +33,7 @@ u64 g_netplay_initial_rtc = 1272737767;
 
 NetPlayServer::~NetPlayServer()
 {
+	std::cout << "Stopping Server" << std::endl;
 	if (is_connected)
 	{
 		m_do_loop = false;
@@ -101,6 +102,7 @@ NetPlayServer::NetPlayServer(const u16 port, bool traversal, const std::string& 
 		m_thread = std::thread(&NetPlayServer::ThreadFunc, this);
 		m_target_buffer_size = 8;
 	}
+	std::cout << "Starting Server" << std::endl;
 }
 
 // called from ---NETPLAY--- thread
@@ -281,7 +283,6 @@ unsigned int NetPlayServer::OnConnect(ENetPeer* socket)
 	spac << (MessageId)NP_MSG_PLAYER_JOIN;
 	spac << player.pid << player.name << player.revision;
 	SendToClients(spac);
-	Smashladder::playerJoinServer(player.name, this);
 	// send new client success message with their id
 	spac.clear();
 	spac << (MessageId)0;
@@ -339,7 +340,7 @@ unsigned int NetPlayServer::OnConnect(ENetPeer* socket)
 		UpdatePadMapping();  // sync pad mappings with everyone
 		UpdateWiimoteMapping();
 	}
-
+	//Smashladder::playerJoinServer(player.name, this);
 	return 0;
 }
 
@@ -596,7 +597,6 @@ unsigned int NetPlayServer::OnData(sf::Packet& packet, Client& player)
 		SendToClients(spac);
 
 		m_is_running = false;
-		std::cout << "Netplay Game Stopping" << std::endl;
 	}
 	break;
 

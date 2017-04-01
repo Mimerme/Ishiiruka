@@ -175,6 +175,7 @@ bool NetPlayClient::Connect()
 	spac << scm_rev_git_str;
 	spac << netplay_dolphin_ver;
 	spac << m_player_name;
+	std::cout << "Connecting with name " << m_player_name << std::endl;
 	Send(spac);
 	enet_host_flush(m_client);
 	sf::Packet rpac;
@@ -231,7 +232,7 @@ bool NetPlayClient::Connect()
 		m_dialog->Update();
 
 		m_is_connected = true;
-
+		std::cout << "Connected" << std::endl;
 		return true;
 	}
 }
@@ -593,6 +594,7 @@ void NetPlayClient::Disconnect()
 	ENetEvent netEvent;
 	m_connecting = false;
 	m_connection_state = ConnectionState::Failure;
+	std::cout << "Disconnect" << std::endl;
 	if (m_server)
 		enet_peer_disconnect(m_server, 0);
 	else
