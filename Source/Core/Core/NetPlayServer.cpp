@@ -340,7 +340,7 @@ unsigned int NetPlayServer::OnConnect(ENetPeer* socket)
 		UpdatePadMapping();  // sync pad mappings with everyone
 		UpdateWiimoteMapping();
 	}
-	//Smashladder::playerJoinServer(player.name, this);
+	Smashladder::playerJoinServer(player.name, this);
 	return 0;
 }
 

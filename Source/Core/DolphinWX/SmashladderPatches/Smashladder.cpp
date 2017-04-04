@@ -16,7 +16,7 @@ wxString Smashladder::playername = wxString("");
 
 void Smashladder::playerJoinServer(std::string playername, NetPlayServer *server) {
 	currentPlayerCount++;
-	if (expectedPlayerCount == currentPlayerCount) {
+	if (expectedPlayerCount == currentPlayerCount && m_netplay) {
 		//Start netplay
 		SConfig& instance = SConfig::GetInstance();
 		NetSettings settings;
@@ -39,5 +39,6 @@ void Smashladder::playerJoinServer(std::string playername, NetPlayServer *server
 		//Start netplay
 		server->SetNetSettings(settings);
 		server->StartGame();
+		m_netplay = false;
 	}
 }
