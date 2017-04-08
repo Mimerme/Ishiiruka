@@ -106,7 +106,7 @@ void DolphinApp::OnInitCmdLine(wxCmdLineParser& parser)
 		wxCMD_LINE_PARAM_OPTIONAL },
 	{ wxCMD_LINE_OPTION, "gamename","gamename", "Netplay game name ", wxCMD_LINE_VAL_STRING,
 		wxCMD_LINE_PARAM_OPTIONAL },
-	{ wxCMD_LINE_OPTION, "t", "traversal", "Host/Join a traversal netplay lobby", wxCMD_LINE_VAL_NONE,
+	{ wxCMD_LINE_SWITCH, "t", "traversal", "Host/Join a traversal netplay lobby", wxCMD_LINE_VAL_NONE,
 		wxCMD_LINE_PARAM_OPTIONAL },
 	{ wxCMD_LINE_OPTION, "port", "port", "Set direct connection port", wxCMD_LINE_VAL_DOUBLE,
 		wxCMD_LINE_PARAM_OPTIONAL },

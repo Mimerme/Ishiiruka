@@ -334,7 +334,7 @@ void NetPlaySetupFrame::DoHost()
 	IniFile::Section& netplay_section = *ini_file.GetOrCreateSection("NetPlay");
 
 	NetPlayHostConfig host_config;
-	if(Smashladder::m_netplay)
+	if(!Smashladder::m_netplay)
 		host_config.game_name = WxStrToStr(m_game_lbox->GetStringSelection());
 	else
 		host_config.game_name = WxStrToStr(Smashladder::gamename);

@@ -10,4 +10,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LocalDebuggerCommandArguments>/n host</LocalDebuggerCommandArguments>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LocalDebuggerCommandArguments>/gamename "SUPER SMASH BROS. Melee (GALE01, Revision 2)" /n host /t</LocalDebuggerCommandArguments>
+  </PropertyGroup>
 </Project>
