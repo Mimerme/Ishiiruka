@@ -84,7 +84,7 @@ bool NetPlayLauncher::Join(const NetPlayJoinConfig& config)
 	else
 		host = config.connect_host;
 
-	if (Smashladder::m_netplay) {
+	if (!Smashladder::m_netplay) {
 			netplay_client =
 			new NetPlayClient(host, config.connect_port, npd, config.player_name, config.use_traversal,
 				config.traversal_host, config.traversal_port);

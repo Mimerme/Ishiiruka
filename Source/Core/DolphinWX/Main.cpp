@@ -100,15 +100,15 @@ bool DolphinApp::Initialize(int& c, wxChar** v)
 void DolphinApp::OnInitCmdLine(wxCmdLineParser& parser)
 {
 	static const wxCmdLineEntryDesc desc[] = {
-		{ wxCMD_LINE_OPTION, "n", "netplay", "Starts/Joins a netplay server", wxCMD_LINE_VAL_STRING,
+		{ wxCMD_LINE_OPTION, "n", "netplay", "Starts/Joins a netplay server. Followed by a direct ip connection or a traversal code", wxCMD_LINE_VAL_STRING,
 		wxCMD_LINE_PARAM_OPTIONAL },{ wxCMD_LINE_SWITCH, "s", "spectator", "Enable or disable spectators for the lobby", wxCMD_LINE_VAL_NONE,
 		wxCMD_LINE_PARAM_OPTIONAL },{ wxCMD_LINE_OPTION, "players", "playercount", "Expected number of players before the game starts (Host Only)", wxCMD_LINE_VAL_NUMBER,
 		wxCMD_LINE_PARAM_OPTIONAL },
-	{ wxCMD_LINE_OPTION, "player1","player1", "Player 2 expected name (Host Only)", wxCMD_LINE_VAL_STRING,
+	{ wxCMD_LINE_OPTION, "gamename","gamename", "Netplay game name ", wxCMD_LINE_VAL_STRING,
 		wxCMD_LINE_PARAM_OPTIONAL },
-	{ wxCMD_LINE_OPTION, "player2", "player2", "Player 3 expected name (Host Only)", wxCMD_LINE_VAL_STRING,
+	{ wxCMD_LINE_OPTION, "t", "traversal", "Host/Join a traversal netplay lobby", wxCMD_LINE_VAL_NONE,
 		wxCMD_LINE_PARAM_OPTIONAL },
-	{ wxCMD_LINE_OPTION, "player3", "player3", "Player 4 expected name (Host Only)", wxCMD_LINE_VAL_STRING,
+	{ wxCMD_LINE_OPTION, "port", "port", "Set direct connection port", wxCMD_LINE_VAL_DOUBLE,
 		wxCMD_LINE_PARAM_OPTIONAL },
 	{ wxCMD_LINE_OPTION, "name", "playername", "Set netplay username", wxCMD_LINE_VAL_STRING,
 		wxCMD_LINE_PARAM_OPTIONAL },
@@ -124,20 +124,12 @@ bool DolphinApp::OnCmdLineParsed(wxCmdLineParser& parser)
 		 Smashladder::m_netplay_host = true;
 	 }
 	 Smashladder::spec = parser.Found("spectator");
-		wxString temp; 
-		parser.Found("playercount", &Smashladder::expectedPlayerCount);
-		if (parser.Found("player1", &temp)) {
-			Smashladder::expectedPlayerNames[0] = std::string(temp.mb_str());
-		}
-			if (parser.Found("player2", &temp)) {
-				
-				Smashladder::expectedPlayerNames[1] = std::string(temp.mb_str());
-			}
-				if (parser.Found("player3", &temp)) {
-					
-					Smashladder::expectedPlayerNames[1] = std::string(temp.mb_str()); \
-				}
-					parser.Found("playername", &Smashladder::playername);
+	wxString temp; 
+	parser.Found("playercount", &Smashladder::expectedPlayerCount);
+	parser.Found("gamename", &Smashladder::gamename);
+	Smashladder::is_traversal = parser.Found("traversal");
+	parser.Found("port", &Smashladder::direct_port);
+
 	return true;
 }
 

@@ -337,7 +337,7 @@ void NetPlaySetupFrame::DoHost()
 	if(Smashladder::m_netplay)
 		host_config.game_name = WxStrToStr(m_game_lbox->GetStringSelection());
 	else
-		host_config.game_name = WxStrToStr("SUPER SMASH BROS. Melee (GALE01, Revision 2)");
+		host_config.game_name = WxStrToStr(Smashladder::gamename);
 	host_config.use_traversal = m_direct_traversal->GetCurrentSelection() == TRAVERSAL_CHOICE;
 	host_config.player_name = WxStrToStr(m_nickname_text->GetValue());
 	host_config.game_list_ctrl = m_game_list;
@@ -389,8 +389,12 @@ void NetPlaySetupFrame::DoJoin()
 
 	unsigned long port = 0;
 	m_connect_port_text->GetValue().ToULong(&port);
-
-	join_config.connect_port = static_cast<u16>(port);
+	if (Smashladder::m_netplay && !Smashladder::is_traversal) {
+		join_config.connect_port = static_cast<u16>((unsigned long)Smashladder::direct_port);
+	}
+	else {
+		join_config.connect_port = static_cast<u16>(port);
+	}
 
 	if (join_config.use_traversal)
 		join_config.connect_hash_code = WxStrToStr(m_connect_hashcode_text->GetValue());
@@ -399,8 +403,11 @@ void NetPlaySetupFrame::DoJoin()
 
 	join_config.traversal_port = NetPlayLaunchConfig::GetTraversalPortFromIniConfig(netplay_section);
 	join_config.traversal_host = NetPlayLaunchConfig::GetTraversalHostFromIniConfig(netplay_section);
-	if (Smashladder::m_netplay) {
+	if (Smashladder::m_netplay && Smashladder::is_traversal) {
 		join_config.connect_hash_code = std::string(Smashladder::m_netplay_code.mb_str());
+	}
+	else if (Smashladder::m_netplay && Smashladder::is_traversal == false) {
+		join_config.connect_host = std::string(Smashladder::m_netplay_code.mb_str());
 	}
 
 	if (NetPlayLauncher::Join(join_config))

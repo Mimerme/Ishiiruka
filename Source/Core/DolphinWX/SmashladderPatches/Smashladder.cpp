@@ -13,6 +13,9 @@ int Smashladder::currentPlayerCount = 0;
 bool Smashladder::spec = false;
 long Smashladder::expectedPlayerCount = 2;
 wxString Smashladder::playername = wxString("");
+wxString Smashladder::gamename = wxString("");
+bool Smashladder::is_traversal = false;
+double Smashladder::direct_port = 0;
 
 void Smashladder::playerJoinServer(std::string playername, NetPlayServer *server) {
 	currentPlayerCount++;
