@@ -338,7 +338,8 @@ void NetPlaySetupFrame::DoHost()
 		host_config.game_name = WxStrToStr(m_game_lbox->GetStringSelection());
 	else
 		host_config.game_name = WxStrToStr(Smashladder::gamename);
-	host_config.use_traversal = m_direct_traversal->GetCurrentSelection() == TRAVERSAL_CHOICE;
+	if(!Smashladder::m_netplay)
+		host_config.use_traversal = m_direct_traversal->GetCurrentSelection() == TRAVERSAL_CHOICE;
 	host_config.player_name = WxStrToStr(m_nickname_text->GetValue());
 	host_config.game_list_ctrl = m_game_list;
 	host_config.SetDialogInfo(netplay_section, m_parent);
@@ -351,9 +352,15 @@ void NetPlaySetupFrame::DoHost()
 		host_config.listen_port = static_cast<u16>(
 			m_traversal_listen_port_enabled->IsChecked() ? m_traversal_listen_port->GetValue() : 0);
 	}
-	else
+	else if(!host_config.use_traversal  && !Smashladder::m_netplay)
 	{
 		unsigned long listen_port;
+		m_host_port_text->GetValue().ToULong(&listen_port);
+		host_config.listen_port = static_cast<u16>(listen_port);
+	}
+	else if (!host_config.use_traversal && Smashladder::m_netplay)
+	{
+		unsigned long listen_port = (unsigned long) Smashladder::direct_port;
 		m_host_port_text->GetValue().ToULong(&listen_port);
 		host_config.listen_port = static_cast<u16>(listen_port);
 	}
@@ -396,9 +403,9 @@ void NetPlaySetupFrame::DoJoin()
 		join_config.connect_port = static_cast<u16>(port);
 	}
 
-	if (join_config.use_traversal)
+	if (join_config.use_traversal && !Smashladder::m_netplay)
 		join_config.connect_hash_code = WxStrToStr(m_connect_hashcode_text->GetValue());
-	else
+	else if(!join_config.use_traversal && !Smashladder::m_netplay)
 		join_config.connect_host = WxStrToStr(m_connect_ip_text->GetValue());
 
 	join_config.traversal_port = NetPlayLaunchConfig::GetTraversalPortFromIniConfig(netplay_section);
@@ -406,7 +413,7 @@ void NetPlaySetupFrame::DoJoin()
 	if (Smashladder::m_netplay && Smashladder::is_traversal) {
 		join_config.connect_hash_code = std::string(Smashladder::m_netplay_code.mb_str());
 	}
-	else if (Smashladder::m_netplay && Smashladder::is_traversal == false) {
+	else if (Smashladder::m_netplay && !Smashladder::is_traversal) {
 		join_config.connect_host = std::string(Smashladder::m_netplay_code.mb_str());
 	}
 
